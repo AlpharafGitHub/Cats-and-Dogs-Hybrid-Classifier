@@ -15,7 +15,7 @@ class_mapping = {
 @st.cache(allow_output_mutation=True)
 def load_model():
     # URL for the model file on GitHub
-    model_url = "https://github.com/m3mentomor1/Breast-Cancer-Image-Classification/raw/main/CatsAndDogs_Big.hdf5"
+    model_url = "https://github.com/m3mentomor1/Breast-Cancer-Image-Classification/raw/main/cats_and_dogs_small_333.h5"
 
     # Download the model file
     response = requests.get(model_url)
