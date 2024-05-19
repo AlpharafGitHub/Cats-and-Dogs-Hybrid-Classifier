@@ -43,7 +43,7 @@ def predict(image, model):
 
 # Streamlit app
 st.title('Cats and Dogs Image Classifier ')
-uploaded_file = st.file_uploader("Input your Image of Cats and Dogs", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Input your Image of a Cats and Dogs", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     # Display the uploaded image
