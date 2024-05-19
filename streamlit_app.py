@@ -50,4 +50,4 @@ if uploaded_file is not None:
 
     # Make predictions
     predicted_class = predict(image, model)
-    st.write(f"Prediction: {predicted_class}")
+    st.write(f"The Weather is Classified as: {predicted_class}")
