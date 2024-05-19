@@ -1,2 +1,2 @@
-# Hybrid-CAT-and-Dog-Classifier
-Model Deployment which can classify cast and dogs.
+# Weather Image Classifier
+Model Deployment which can classify Weather.
