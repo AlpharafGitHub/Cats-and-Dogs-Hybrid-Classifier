@@ -7,9 +7,8 @@ import requests
 
 # Class mapping
 class_mapping = {
-    0: 'Benign',
-    1: 'Malignant',
-    2: 'Normal',
+    0: 'cats',
+    1: 'dogs',
 }
 
 # Function to load the model
