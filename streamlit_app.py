@@ -1,54 +1,28 @@
 import streamlit as st
-import tensorflow as tf
-import numpy as np
 from PIL import Image
+import numpy as np
+import tensorflow as tf
 import requests
 from io import BytesIO
-import tempfile
-import os
 
-# Class mapping
-class_mapping = {
-    0: 'cats',
-    1: 'dogs',
-}
-
-# Function to load the model
+# Load the pre-trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    # URL for the model file on GitHub
-    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weather Model.h5"
-
-    # Download the model file
+    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weather%20Model.h5"
     response = requests.get(model_url)
     model_bytes = BytesIO(response.content)
-
-    # Save the model bytes to a temporary file
-    temp_model_path = tempfile.NamedTemporaryFile(delete=False, suffix=".h5")
-    with open(temp_model_path.name, 'wb') as f:
-        f.write(model_bytes.getvalue())
-
-    # Load the model from the temporary file
-    model = tf.keras.models.load_model(temp_model_path.name)
-
-    # Clean up the temporary file
-    os.unlink(temp_model_path.name)
-
+    model = tf.keras.models.load_model(model_bytes)
     return model
 
-# Function to preprocess and make predictions
-def predict(image, model):
-    # Preprocess the image
-    img_array = np.array(image)
-    img_array = tf.image.resize(img_array, (256, 256))  # Resize the image
-    img_array = img_array / 255.0  # Normalize the image
+# Define class labels
+class_labels = ['Cloudy', 'Rain', 'Shine', 'Sunrise']
 
-    # Make prediction
-    predictions = model.predict(np.expand_dims(img_array, axis=0))
-
-    # Get the predicted class
-    predicted_class = class_mapping[np.argmax(predictions)]
-    return predicted_class
+# Function to preprocess the image
+def preprocess_image(image):
+    img = image.resize((224, 224))  # Resize to match the model input size
+    img_array = tf.keras.preprocessing.image.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
+    return img_array
 
 # Streamlit app
 st.title("Weather Image Classifier")
@@ -62,6 +36,10 @@ if uploaded_file is not None:
     # Load the model
     model = load_model()
 
+    # Preprocess the image
+    img_array = preprocess_image(image)
+
     # Make predictions
-    predicted_class = predict(image, model)
+    predictions = model.predict(img_array)
+    predicted_class = class_labels[np.argmax(predictions)]
     st.write(f"Prediction: {predicted_class}")
