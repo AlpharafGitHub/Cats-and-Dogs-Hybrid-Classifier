@@ -1,9 +1,11 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-from io import BytesIO  # Add this import
+from io import BytesIO
+import tempfile
 from PIL import Image
 import requests
+import os
 
 # Class mapping
 class_mapping = {
@@ -19,10 +21,18 @@ def load_model():
 
     # Download the model file
     response = requests.get(model_url)
-    model_bytes = response.content
+    model_bytes = BytesIO(response.content)
 
-    # Create an in-memory HDF5 file
-    model = tf.keras.models.load_model(BytesIO(model_bytes))
+    # Save model to a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".h5") as temp_file:
+        temp_file.write(model_bytes.getbuffer())
+        temp_file_path = temp_file.name
+
+    # Load the model from the temporary file
+    model = tf.keras.models.load_model(temp_file_path)
+
+    # Remove the temporary file
+    os.unlink(temp_file_path)
 
     return model
 
