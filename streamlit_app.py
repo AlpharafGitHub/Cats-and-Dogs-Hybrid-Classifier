@@ -5,8 +5,17 @@ import numpy as np
 import tensorflow as tf
 import requests
 
+# Function to download the model file
+@st.cache(suppress_st_warning=True)
+def download_model():
+    model_url = 'https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5'
+    model_path = 'cats_and_dogs_small_333.h5'
+    os.system(f'wget {model_url} -O {model_path}')
+    return model_path
+
 # Load the trained model
-model = tf.keras.models.load_model('https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5')
+model_path = download_model()
+model = tf.keras.models.load_model(model_path)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in set(['png', 'jpg', 'jpeg'])
@@ -47,3 +56,6 @@ def main():
 
         # Show the prediction
         st.write(f"Prediction: {result}")
+
+if __name__ == "__main__":
+    main()
