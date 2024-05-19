@@ -7,6 +7,7 @@ import requests
 import os
 import tempfile
 
+
 # Class mapping
 class_mapping = {
     0: 'cats',
@@ -17,7 +18,7 @@ class_mapping = {
 @st.cache(allow_output_mutation=True)
 def load_model():
     # URL for the model file on GitHub
-    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weathering Model.h5"
+    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weather Model.h5"
 
     # Download the model file
     response = requests.get(model_url)
