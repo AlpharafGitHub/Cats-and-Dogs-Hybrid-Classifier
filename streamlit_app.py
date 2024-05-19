@@ -1,12 +1,11 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-from io import BytesIO
 from PIL import Image
 import requests
-import os
+from io import BytesIO
 import tempfile
-
+import os
 
 # Class mapping
 class_mapping = {
@@ -41,15 +40,14 @@ def load_model():
 def predict(image, model):
     # Preprocess the image
     img_array = np.array(image)
-    img_array = tf.image.resize(img_array, (256, 256))  # Adjust the size as per your model requirements
-    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
-    img_array = img_array / 255.0  # Normalize
+    img_array = tf.image.resize(img_array, (256, 256))  # Resize the image
+    img_array = img_array / 255.0  # Normalize the image
 
     # Make prediction
-    predictions = model.predict(img_array)
+    predictions = model.predict(np.expand_dims(img_array, axis=0))
 
     # Get the predicted class
-    predicted_class = class_mapping[np.argmax(predictions[0])]
+    predicted_class = class_mapping[np.argmax(predictions)]
     return predicted_class
 
 # Streamlit app
