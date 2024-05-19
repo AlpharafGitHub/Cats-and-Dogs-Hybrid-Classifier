@@ -15,7 +15,7 @@ class_mapping = {
 # Load the pre-trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weather%20Model.h5"
+    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weather_Model.h5"
     model_path = tf.keras.utils.get_file("weather_model.h5", origin=model_url, cache_subdir=os.path.abspath("."))
     model = tf.keras.models.load_model(model_path)
     return model
