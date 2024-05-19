@@ -8,7 +8,7 @@ from io import BytesIO
 # Load the pre-trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weather%20Model.h5"
+    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weather Model.h5"
     response = requests.get(model_url)
     model_bytes = BytesIO(response.content)
     model = tf.keras.models.load_model(model_bytes)
