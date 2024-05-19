@@ -6,32 +6,14 @@ import numpy as np
 import requests
 import os
 
-# Function to download the model file
-def download_model_file(url, file_path):
-    response = requests.get(url)
-    if response.status_code == 200:
-        with open(file_path, 'wb') as f:
-            f.write(response.content)
-        return True
-    else:
-        return False
-
-# Download the model file
-model_url = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
-model_path = "cats_and_dogs_small_333.h5"
-if not os.path.exists(model_path):
-    st.write("Downloading model file...")
-    if download_model_file(model_url, model_path):
-        st.write("Model file downloaded successfully.")
-    else:
-        st.write("Failed to download model file. Please check the URL.")
-
+# Function to download the model file (same as before)
 # Load the model
-model = tf.keras.models.load_model(model_path)
+model_path = "cats_and_dogs_small_333.h5"
+model = tf.keras.models.load_model(model_path, compile=False)
 
 # Function to preprocess the image (same as before)
 def preprocess_image(image):
-    img = image.resize((28, 28))  
+    img = image.resize((150, 150))  
     img = np.array(img) / 255.0  
     img = np.expand_dims(img, axis=0)  
     return img
