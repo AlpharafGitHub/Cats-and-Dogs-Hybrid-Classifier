@@ -24,9 +24,9 @@ def load_model():
 def predict(image, model):
     # Preprocess the image
     img_array = np.array(image)
-    img_array = tf.image.resize(img_array, (256, 256))  # Adjust the size as per your model requirements
+    img_array = tf.image.resize(img_array, (244, 244))  # Adjust the size as per your model requirements
     img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
-    img_array = img_array / 255.0  # Normalize
+    img_array = img_array / 255  # Normalize
 
     # Make prediction
     predictions = model.predict(img_array)
