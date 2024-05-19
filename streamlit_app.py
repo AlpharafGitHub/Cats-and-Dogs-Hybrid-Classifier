@@ -22,7 +22,7 @@ def load_model():
     # model_bytes = response.content
 
     # Create an in-memory HDF5 file
-    model = tf.keras.models.load_model(CatsAndDogs_Big.h5)
+    model = tf.keras.models.load_model("CatsAndDogs_Big.h5")
 
     return model
 
