@@ -23,7 +23,7 @@ def load_model():
 # Function to preprocess and make predictions
 def predict(image, model):
     # Preprocess the image
-    img = image.resize((224, 224))
+    image_array = image.resize((224, 224))
     img_array = tf.keras.preprocessing.image.img_to_array(image)
     img_array = tf.expand_dims(img_array, 0)
 
