@@ -1,11 +1,11 @@
 pandas
-numpy
+numpy==1.23.5
 matplotlib
 seaborn
 Pillow
-tensorflow
+tensorflow==2.12.0
 keras
 scikit-learn
 h5py
 requests
-streamlit
+streamlit==1.22.0
