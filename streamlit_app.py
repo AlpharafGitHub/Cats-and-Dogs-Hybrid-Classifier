@@ -4,6 +4,7 @@ import numpy as np
 from io import BytesIO
 from PIL import Image
 import requests
+import h5py
 
 # Class mapping
 class_mapping = {
@@ -21,8 +22,12 @@ def load_model():
     response = requests.get(model_url)
     model_bytes = response.content
 
-    # Create an in-memory HDF5 file
-    model = tf.keras.models.load_model(BytesIO(model_bytes))
+    # Save the model bytes to a BytesIO object
+    model_io = BytesIO(model_bytes)
+
+    # Load the model using h5py
+    with h5py.File(model_io, 'r') as model_file:
+        model = tf.keras.models.load_model(model_file)
 
     return model
 
@@ -42,7 +47,7 @@ def predict(image, model):
     return predicted_class
 
 # Streamlit app
-st.title('Cats and Dogs Image Classifier ')
+st.title('Cats and Dogs Image Classifier')
 uploaded_file = st.file_uploader("Input your Image of a Cats and Dogs", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
