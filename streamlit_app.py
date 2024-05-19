@@ -1,61 +1,61 @@
 import streamlit as st
-import os
-from PIL import Image
-import numpy as np
 import tensorflow as tf
+import numpy as np
+from io import BytesIO
+from PIL import Image
 import requests
 
-# Function to download the model file
-@st.cache(suppress_st_warning=True)
-def download_model():
-    model_url = 'https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5'
-    model_path = 'cats_and_dogs_small_333.h5'
-    os.system(f'wget {model_url} -O {model_path}')
-    return model_path
+# Class mapping
+class_mapping = {
+    0: 'Benign',
+    1: 'Malignant',
+    2: 'Normal',
+}
 
-# Load the trained model
-model_path = download_model()
-model = tf.keras.models.load_model(model_path)
+# Function to load the model
+@st.cache(allow_output_mutation=True)
+def load_model():
+    # URL for the model file on GitHub
+    model_url = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in set(['png', 'jpg', 'jpeg'])
+    # Download the model file
+    response = requests.get(model_url)
+    model_bytes = response.content
 
-def preprocess_image(image):
-    img = image.resize((256, 256))  # Adjust the size to match your model's input
-    img = np.array(img)
-    img = img / 255.0  # Normalize the image
-    img = np.expand_dims(img, axis=0)  # Add batch dimension
-    return img
+    # Create an in-memory HDF5 file
+    model = tf.keras.models.load_model(BytesIO(model_bytes))
 
-def classify_image(image):
-    img = preprocess_image(image)
-    prediction = model.predict(img)
-    if prediction[0] > 0.5:
-        class_index = 0
-    else:
-        class_index = 1
+    return model
 
-    if class_index == 0:
-        return 'cats'
-    else:
-        return 'dogs'
+# Function to preprocess and make predictions
+def predict(image, model):
+    # Preprocess the image
+    img_array = np.array(image)
+    img_array = tf.image.resize(img_array, (256, 256))  # Adjust the size as per your model requirements
+    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
+    img_array = img_array / 255.0  # Normalize
 
-def main():
-    st.title("Cats and Dogs Image Classifier")
-    st.text("Upload an image and the model will predict whether it's a cat or a dog.")
+    # Make prediction
+    predictions = model.predict(img_array)
 
-    uploaded_file = st.file_uploader("Choose an image file", type=['jpg', 'jpeg', 'png'])
+    # Get the predicted class
+    predicted_class = class_mapping[np.argmax(predictions[0])]
+    return predicted_class
 
-    if uploaded_file is not None:
-        # Save the uploaded image to a temporary directory
-        image = Image.open(uploaded_file)
-        result = classify_image(image)
+# Streamlit app
+st.title("Cats and Dogs Image Classifier")
+st.text("Upload an image and the model will predict whether it's a cat or a dog.")
 
-        # Display the uploaded image
-        st.image(image, caption='Uploaded Image', use_column_width=True)
+uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
 
-        # Show the prediction
-        st.write(f"Prediction: {result}")
+if uploaded_file is not None:
+    # Display the uploaded image
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Uploaded Image.', use_column_width=True)
 
-if __name__ == "__main__":
-    main()
+    # Load the model
+    model = load_model()
+
+    # Make predictions
+    predicted_class = predict(image, model)
+    st.write(f"Prediction: {predicted_class}")
