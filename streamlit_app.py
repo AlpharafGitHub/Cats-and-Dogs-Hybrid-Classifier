@@ -4,9 +4,18 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
 from PIL import Image
+import os
+
+# Function to download the model file
+@st.cache(suppress_st_warning=True)
+def download_model():
+    model_url = 'https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5'
+    model_path = 'cats_and_dogs_small_333.h5'
+    os.system(f'wget {model_url} -O {model_path}')
+    return model_path
 
 # Load your model
-model_path = 'https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5'
+model_path = download_model()
 model = load_model(model_path)
 
 # Define class names
