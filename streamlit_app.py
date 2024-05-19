@@ -15,7 +15,7 @@ class_mapping = {
 @st.cache(allow_output_mutation=True)
 def load_model():
     # URL for the model file on GitHub
-    model_url = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/CatsAndDogs_Big.h5"
+    model_url = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/blob/main/cats_and_dogs_small_333.h5"
 
     # Download the model file
     response = requests.get(model_url)
