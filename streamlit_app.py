@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 
 # Load the trained model
-model = tf.keras.models.load_model('cats_and_dogs_small_333.h5')
+model = tf.keras.models.load_model('https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in set(['png', 'jpg', 'jpeg'])
