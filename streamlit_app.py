@@ -4,8 +4,6 @@ import numpy as np
 from io import BytesIO
 from PIL import Image
 import requests
-import os
-import tempfile
 
 # Class mapping
 class_mapping = {
@@ -23,17 +21,8 @@ def load_model():
     response = requests.get(model_url)
     model_bytes = BytesIO(response.content)
 
-    # Save the model bytes to a temporary file
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".h5") as temp_file:
-        temp_file.write(model_bytes.getvalue())
-        temp_file_path = temp_file.name
-
-    # Load the model from the temporary file
-    model = tf.keras.models.load_model(temp_file_path)
-
-    # Close and remove the temporary file
-    temp_file.close()
-    os.unlink(temp_file_path)
+    # Load the model from the BytesIO object
+    model = tf.keras.models.load_model(model_bytes)
 
     return model
 
