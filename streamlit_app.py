@@ -38,7 +38,7 @@ def predict(image, model):
 
 # Streamlit app
 st.title("Weather Image Classifier")
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Image weather classification is a deep learning algorithm that categorizes weather conditions from images. Using multiple libraries and dependencies, it identifies patterns like Cloudy, Rainy, Shine, or Sunrise. This aids in real-time weather prediction for applications like meteorology and autonomous driving.", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     # Display the uploaded image
