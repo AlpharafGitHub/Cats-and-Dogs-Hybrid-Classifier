@@ -8,7 +8,7 @@ import os
 
 # Function to download the model file (same as before)
 # Load the model
-model_path = "cats_and_dogs_small_333.h5"
+model_path = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
 model = tf.keras.models.load_model(model_path, compile=False)
 
 # Function to preprocess the image (same as before)
