@@ -1,10 +1,9 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-import math
+from io import BytesIO  # Add this import
 from PIL import Image
 import requests
-import os
 
 # Class mapping
 class_mapping = {
