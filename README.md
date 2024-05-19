@@ -1,2 +1,2 @@
-# Hybrid-Cloud-Detector
-Model Deployment which can classify types of clouds.
+# Hybrid-CAT-and-Dog-Classifier
+Model Deployment which can classify cast and dogs.
