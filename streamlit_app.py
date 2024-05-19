@@ -15,14 +15,14 @@ class_mapping = {
 @st.cache(allow_output_mutation=True)
 def load_model():
     # URL for the model file on GitHub
-    # model_url = "https://github.com/m3mentomor1/Breast-Cancer-Image-Classification/raw/main/CatsAndDogs_Big.h5"
+    model_url = "https://github.com/m3mentomor1/Breast-Cancer-Image-Classification/raw/main/CatsAndDogs_Big.hdf5"
 
     # Download the model file
-    # response = requests.get(model_url)
-    # model_bytes = response.content
+    response = requests.get(model_url)
+    model_bytes = response.content
 
     # Create an in-memory HDF5 file
-    model = tf.keras.models.load_model("CatsAndDogs_Big.hdf5")
+    model = tf.keras.models.load_model(BytesIO(model_bytes))
 
     return model
 
