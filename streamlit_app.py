@@ -8,8 +8,10 @@ import os
 
 # Class mapping
 class_mapping = {
-    0: 'cats',
-    1: 'dogs',
+    0: 'Cloudy',
+    1: 'Rain',
+    2: 'Shine',
+    3: 'Sunrise',
 }
 
 # Load the pre-trained model
