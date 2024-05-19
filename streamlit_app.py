@@ -1,56 +1,39 @@
 import streamlit as st
 import tensorflow as tf
-import numpy as np
-from io import BytesIO
+from tensorflow.keras import models
 from PIL import Image
-import requests
+import numpy as np
 
-# Class mapping
-class_mapping = {
-    0: 'cats',
-    1: 'dogs',
-}
+# Load the model
+model_path = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
+model = tf.keras.models.load_model(model_path)
 
-# Function to load the model
-@st.cache(allow_output_mutation=True)
-def load_model():
-    # Path to the H5 model file
-    model_path = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
+# Function to preprocess the image
+def preprocess_image(image):
+    img = image.resize((28, 28))  # Resize image to match model's expected sizing
+    img = np.array(img) / 255.0  # Normalize pixel values to range [0, 1]
+    img = np.expand_dims(img, axis=0)  # Add batch dimension
+    return img
 
-    # Load the model
-    model = tf.keras.models.load_model(model_path)
+def main():
+    st.title("Cats and Dogs Classifier")
 
-    return model
+    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-# Function to preprocess and make predictions
-def predict(image, model):
-    # Preprocess the image
-    img_array = np.array(image)
-    img_array = tf.image.resize(img_array, (256, 256))  # Adjust the size as per your model requirements
-    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
-    img_array = img_array / 255.0  # Normalize
+    if uploaded_file is not None:
+        # Display the uploaded image
+        image = Image.open(uploaded_file)
+        st.image(image, caption='Uploaded Image.', use_column_width=True)
 
-    # Make prediction
-    predictions = model.predict(img_array)
+        # Preprocess the image
+        img_array = preprocess_image(image)
 
-    # Get the predicted class
-    predicted_class = class_mapping[np.argmax(predictions[0])]
-    return predicted_class
+        # Make prediction
+        prediction = model.predict(img_array)
+        if prediction[0][0] > 0.5:
+            st.write("Prediction: Dog")
+        else:
+            st.write("Prediction: Cat")
 
-# Streamlit app
-st.title("Cats and Dogs Image Classifier")
-st.text("Upload an image and the model will predict whether it's a cat or a dog.")
-
-uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
-
-if uploaded_file is not None:
-    # Display the uploaded image
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
-
-    # Load the model
-    model = load_model()
-
-    # Make predictions
-    predicted_class = predict(image, model)
-    st.write(f"Prediction: {predicted_class}")
+if __name__ == "__main__":
+    main()
