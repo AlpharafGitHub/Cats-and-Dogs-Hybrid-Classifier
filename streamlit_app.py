@@ -1,9 +1,15 @@
 import streamlit as st
-from PIL import Image
-import numpy as np
 import tensorflow as tf
-import requests
 from io import BytesIO
+from PIL import Image
+import requests
+import os  # Importing the os module
+
+# Class mapping
+class_mapping = {
+    0: 'cats',
+    1: 'dogs',
+}
 
 # Load the pre-trained model
 @st.cache(allow_output_mutation=True)
@@ -13,15 +19,20 @@ def load_model():
     model = tf.keras.models.load_model(model_path)
     return model
 
-# Define class labels
-class_labels = ['Cloudy', 'Rain', 'Shine', 'Sunrise']
-
-# Function to preprocess the image
-def preprocess_image(image):
-    img = image.resize((224, 224))  # Resize to match the model input size
-    img_array = tf.keras.preprocessing.image.img_to_array(img)
+# Function to preprocess and make predictions
+def predict(image, model):
+    # Preprocess the image
+    img_array = np.array(image)
+    img_array = tf.image.resize(img_array, (256, 256))  # Adjust the size as per your model requirements
     img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
-    return img_array
+    img_array = img_array / 255.0  # Normalize
+
+    # Make prediction
+    predictions = model.predict(img_array)
+
+    # Get the predicted class
+    predicted_class = class_mapping[np.argmax(predictions[0])]
+    return predicted_class
 
 # Streamlit app
 st.title("Weather Image Classifier")
@@ -35,10 +46,6 @@ if uploaded_file is not None:
     # Load the model
     model = load_model()
 
-    # Preprocess the image
-    img_array = preprocess_image(image)
-
     # Make predictions
-    predictions = model.predict(img_array)
-    predicted_class = class_labels[np.argmax(predictions)]
+    predicted_class = predict(image, model)
     st.write(f"Prediction: {predicted_class}")
