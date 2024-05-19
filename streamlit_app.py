@@ -1,9 +1,9 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-from io import BytesIO
 from PIL import Image
 import requests
+import os
 
 # Class mapping
 class_mapping = {
@@ -15,14 +15,16 @@ class_mapping = {
 @st.cache(allow_output_mutation=True)
 def load_model():
     # URL for the model file on GitHub
-    model_url = "https://github.com/m3mentomor1/Breast-Cancer-Image-Classification/raw/main/cats_and_dogs_small_333.h5"
+    model_url = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
 
     # Download the model file
     response = requests.get(model_url)
-    model_bytes = response.content
+    model_path = "cats_and_dogs_small_333.h5"
+    with open(model_path, "wb") as f:
+        f.write(response.content)
 
-    # Create an in-memory HDF5 file
-    model = tf.keras.models.load_model(BytesIO(model_bytes))
+    # Load the model
+    model = tf.keras.models.load_model(model_path)
 
     return model
 
