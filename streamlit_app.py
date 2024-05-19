@@ -14,15 +14,11 @@ class_mapping = {
 # Function to load the model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    # URL for the model file on GitHub
-    model_url = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
+    # Path to the H5 model file
+    model_path = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
 
-    # Download the model file
-    response = requests.get(model_url)
-    model_bytes = response.content
-
-    # Create an in-memory HDF5 file
-    model = tf.keras.models.load_model(BytesIO(model_bytes))
+    # Load the model
+    model = tf.keras.models.load_model(model_path)
 
     return model
 
