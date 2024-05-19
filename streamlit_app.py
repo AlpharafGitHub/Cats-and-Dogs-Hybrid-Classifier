@@ -16,16 +16,14 @@ class_mapping = {
 @st.cache(allow_output_mutation=True)
 def load_model():
     # URL for the model file on GitHub
-    model_url = "https://github.com/AlpharafGitHub/Cats-and-Dogs-Hybrid-Classifier/raw/main/cats_and_dogs_small_333.h5"
+    model_url = "https://github.com/AlpharafGitHub/Weathering_Image_Classifier/raw/main/Weathering Model.h5"
 
     # Download the model file
     response = requests.get(model_url)
-    model_path = "cats_and_dogs_small_333.h5"
-    with open(model_path, "wb") as f:
-        f.write(response.content)
+    model_bytes = response.content
 
-    # Load the model
-    model = tf.keras.models.load_model(model_path)
+    # Create an in-memory HDF5 file
+    model = tf.keras.models.load_model(BytesIO(model_bytes))
 
     return model
 
@@ -45,8 +43,8 @@ def predict(image, model):
     return predicted_class
 
 # Streamlit app
-st.title("Cats and Dogs Classifier")
-uploaded_file = st.file_uploader("Choose a image of a cat or dog...", type=["jpg", "jpeg", "png"])
+st.title("Weather Image Classifier")
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     # Display the uploaded image
